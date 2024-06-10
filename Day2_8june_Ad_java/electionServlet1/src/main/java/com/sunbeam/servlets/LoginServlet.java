@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
 				
 				//System.out.println("Login Successful: " + user);
 				if(user.getRole().equals("voter")) { // voter login
-					resp.sendRedirect("candlist");
+					resp.sendRedirect("candlist1");
 					
 					//RequestDispatcher rd = req.getRequestDispatcher("candlist");
 					//rd.forward(req, resp);

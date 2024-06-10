@@ -1,3 +1,6 @@
+
+
+
 package com.sunbeam.servlets;
 
 import java.io.IOException;
@@ -23,6 +26,11 @@ public class VoteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		processRequest(req, resp);
 	}
+//	@Override
+//	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//		processRequest(req, resp);
+//	}
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		processRequest(req, resp);
@@ -35,6 +43,7 @@ public class VoteServlet extends HttpServlet {
 		
 		if(user.getStatus() == 0) { // if user not yet voted
 			String candidateId = req.getParameter("candidate");
+			//int id = Integer.parseInt(candidateId);
 			int id = Integer.parseInt(candidateId);
 			try(CandidateDao candDao = new CandidateDaoImpl()) {
 				candDao.incrementVote(id);
@@ -81,3 +90,4 @@ public class VoteServlet extends HttpServlet {
 		out.println("</html>");
 	}
 }
+

@@ -1,11 +1,14 @@
 package com.sunbeam.servlets;
 
 import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +31,7 @@ public class CandidateListServlet extends HttpServlet {
 		processRequest(req, resp);
 	}
 	
-	private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException , IOException {
+	protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException , IOException {
 		List<Candidate> list = new ArrayList<Candidate>();
 		try(CandidateDao candDao= new CandidateDaoImpl()){
 			list =candDao.findAll();
@@ -45,13 +48,34 @@ public class CandidateListServlet extends HttpServlet {
 		out.println("</head>");
 		out.println("<body>");
 		out.println("<h3> Online Voting</h3>");
+		
+		String userName ="";
+		Cookie[] arr = req.getCookies();
+		if(arr != null) {
+			for(Cookie c : arr) {
+				if(c.getName().equals("uname")) {
+					userName = c.getValue();
+					break;
+				}
+				
+			}
+		}
+		out.printf("Hello, %s<hr/>\n", userName);
+		
+		ServletContext ctx = this.getServletContext();
+		String message = (String) ctx.getAttribute("announcement");
+		if(message != null)
+			out.printf("Announcement: %s<br/><br/>\n", message);
+		
+		
 		out.println("<form method='post' action='vote'>");
 		
 		for(Candidate c : list) {
-		
-			out.printf("input type='radio' name='Candidate' value='%d'/> %s (%s) <br/>\n", c.getId(),c.getName(),c.getParty());
+		    
+			//<input type ='radio' name ='candidate' value='submit-value'/> 
+			out.printf("<input type='radio' name='candidate' value='%d'/> %s (%s) <br/>\n", c.getId(),c.getName(),c.getParty());
 		}
-		out.println("</input type='submit' value='Vote'/>");
+		out.println("<input type='submit' value='Vote'/>");
 		out.println("</form>");
 		out.println("</body>");
 		
